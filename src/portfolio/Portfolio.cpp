@@ -30,11 +30,11 @@ const Position& Portfolio::getPosition(const std::string& symbol) const {
     return it != positions_.end() ? it->second : empty;
 }
 
-double Portfolio::equity(const PriceSnapshot& prices) const {
+double Portfolio::equity(const PriceSnapshot& priceSnapshot) const {
     double totalEquity = cash_;
     
     for (const auto& [symbol, pos] : positions_) {
-        totalEquity += pos.quantity * prices.lastPrice.at(symbol); // Simplified: using avgPrice as current price
+        totalEquity += pos.quantity * priceSnapshot.prices.at(symbol); // Simplified: using avgPrice as current price
     }
 
     return totalEquity;

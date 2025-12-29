@@ -11,9 +11,10 @@
 
 class DummyStrategy final : public Strategy {
 public:
-    explicit DummyStrategy(StrategyAction action, double confidence)
+    explicit DummyStrategy(StrategyAction action, double confidence, double quantity)
         : action_(action)
         , confidence_(confidence)
+        , quantity_(quantity)
     {}
 
     std::vector<IndicatorKey> requiredIndicators() const override {
@@ -23,12 +24,13 @@ public:
     StrategyDecision evaluate(
         const StrategyContext&,
         const IndicatorSet&) const override {
-        return StrategyDecision{ action_, confidence_ };
+        return StrategyDecision{ action_, confidence_, quantity_ };
     }
 
 private:
     StrategyAction action_;
     double confidence_;
+    double quantity_;
 };
 
 TEST_CASE("Portfolio basic trades") {
@@ -43,18 +45,23 @@ TEST_CASE("Backtester applies DummyStrategy decisions") {
     BasicIndicatorEngine engine;
     ConsoleOutput output;
     Backtester bt(portfolio, engine, output);
+    const std::string symbol = "TEST";
     MarketSeries series = {
+        .symbol = symbol,
         .bars = {
             { std::chrono::system_clock::now(), 10, 10, 10, 10, 0 },
             { std::chrono::system_clock::now(), 10, 10, 10, 10, 0 }
         }
     };
+    MarketData marketData = { series };
 
-    DummyStrategy alwaysBuy(StrategyAction::Buy, 1.0);
+    DummyStrategy alwaysBuy(
+        StrategyAction::Buy, 1.0, 1.0);
 
-    bt.run("TEST", series, alwaysBuy);
+    bt.run(symbol, marketData, alwaysBuy, 0, series.bars.size() - 1);
 
-    CHECK(portfolio.getPosition("TEST").quantity == 2.0);
+    CHECK(portfolio.getPosition(symbol).quantity == 2.0);
     CHECK(portfolio.cash() == doctest::Approx(80.0));
+    CHECK(portfolio.tradeCount() == 2);
 }
 

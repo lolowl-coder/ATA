@@ -19,7 +19,9 @@ public:
     }
 
     // Run simulation on symbol data
-    void run(const std::string& symbol, const MarketSeries& series, Strategy& strategy);
+    void run(
+        const std::string& symbol, const MarketData& marketData, Strategy& strategy,
+        const size_t startIndex, const size_t endIndex);
 
 private:
     Portfolio& portfolio_;

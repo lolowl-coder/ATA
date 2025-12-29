@@ -7,7 +7,7 @@
 
 // Snapshot of last prices per symbol
 struct PriceSnapshot {
-    std::unordered_map<std::string, double> lastPrice;
+    std::unordered_map<std::string, double> prices;
 };
 
 // Single position for a symbol
@@ -30,10 +30,14 @@ public:
     double cash() const { return cash_; }
 
 	// Total equity (cash + market value of positions)
-	double equity(const PriceSnapshot& prices) const;
+	double equity(const PriceSnapshot& priceSnapshot) const;
 
 	// Apply strategy decision
     void apply(const std::string& symbol, const StrategyDecision& d, const double price);
+
+    double realizedPnL() const { return realizedPnL_; }
+
+    size_t tradeCount() const { return tradeCount_; }
 
 private:
 	// Cash balance

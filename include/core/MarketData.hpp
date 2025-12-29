@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Enums.hpp"
 #include "core/Types.hpp"
 
@@ -21,3 +22,5 @@ struct MarketSeries {
     Timeframe timeframe = Timeframe::Daily;
     std::vector<Bar> bars;
 };
+
+using MarketData = std::vector<MarketSeries>;

@@ -48,9 +48,15 @@ addTest(
 addTest(
     TestStrategies
     "strategy/TestMovingAverage.cpp"
+    "strategy/TestMovingAverageCrossover.cpp"
     )
 # Backtester
 addTest(
     TestBacktester
     "backtester/TestBacktester.cpp"
+    )
+# Capital Allocator
+addTest(
+    TestCapitalAllocator
+    "backtester/TestCapitalAllocator.cpp"
     )

@@ -1,5 +1,6 @@
 #pragma once
 
+#include "backtester/CapitalAllocator.hpp"
 #include "core/MarketData.hpp"
 #include "indicators/IndicatorEngine.hpp"
 #include "output/Output.hpp"
@@ -21,7 +22,7 @@ public:
     // Run simulation on symbol data
     void run(
         const std::string& symbol, const MarketData& marketData, Strategy& strategy,
-        const size_t startIndex, const size_t endIndex);
+        CapitalAllocator& allocator, const size_t startIndex, const size_t endIndex);
 
 private:
     Portfolio& portfolio_;

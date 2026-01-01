@@ -1,10 +1,12 @@
 #include "backtester/Backtester.hpp"
+#include "backtester/FixedFractionalAllocator.hpp"
 #include "indicators/BasicIndicatorEngine.hpp"
 
 void Backtester::run(
     const std::string& symbol,
     const MarketData& marketData,
     Strategy& strategy,
+    CapitalAllocator& allocator,
     const size_t startIndex,
     const size_t endIndex
 ) {
@@ -28,8 +30,21 @@ void Backtester::run(
                 i
 		    };
             StrategyDecision decision = strategy.evaluate(ctx, indicators);
+            
+            AllocationContext allocCtx{};
+            allocCtx.capital = portfolio_.cash();
+            allocCtx.price = ctx.closePrice;
+            allocCtx.confidence = decision.confidence;
+            allocCtx.openPositions = portfolio_.openPositionsCount();
+            
+            decision.quantity = allocator.allocate(allocCtx);
+            
+            if(decision.quantity <= 0.0)
+            {
+                continue;
+            }
 
-            const double price = series.bars[i].close;
+		    portfolio_.apply(symbol, decision, ctx.closePrice);
 
             OutputEventContext outputCtx {
                 series.bars[i].ts,
@@ -37,10 +52,8 @@ void Backtester::run(
                 decision,
                 portfolio_
 		    };
+
             output_.onBar(outputCtx, priceSnapshot);
-
-		    portfolio_.apply(symbol, decision, price);
-
         }
     }
   

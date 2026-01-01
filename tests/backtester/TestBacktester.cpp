@@ -1,6 +1,7 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "backtester/Backtester.hpp"
+#include "backtester/FixedFractionalAllocator.hpp"
 #include "core/MarketData.hpp"
 #include "indicators/BasicIndicatorEngine.hpp"
 #include "output/ConsoleOutput.hpp"
@@ -58,10 +59,12 @@ TEST_CASE("Backtester applies DummyStrategy decisions") {
     DummyStrategy alwaysBuy(
         StrategyAction::Buy, 1.0, 1.0);
 
-    bt.run(symbol, marketData, alwaysBuy, 0, series.bars.size() - 1);
+	FixedFractionalAllocator capitalAllocator(0.2, 4); // 20% risk fraction, max 4 positions
 
-    CHECK(portfolio.getPosition(symbol).quantity == 2.0);
-    CHECK(portfolio.cash() == doctest::Approx(80.0));
+    bt.run(symbol, marketData, alwaysBuy, capitalAllocator, 0, series.bars.size() - 1);
+
+    // According to current allocation config
+    CHECK(portfolio.getPosition(symbol).quantity == 0.975);
+    CHECK(portfolio.cash() == doctest::Approx(90.25));
     CHECK(portfolio.tradeCount() == 2);
 }
-

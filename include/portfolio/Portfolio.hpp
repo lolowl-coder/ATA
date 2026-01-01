@@ -39,6 +39,18 @@ public:
 
     size_t tradeCount() const { return tradeCount_; }
 
+    double positionQuantity(const std::string& symbol) const {
+        auto it = positions_.find(symbol);
+        if (it != positions_.end()) {
+            return it->second.quantity;
+        }
+        return 0.0;
+	}
+
+    size_t openPositionsCount() const {
+        return positions_.size();
+	}
+
 private:
 	// Cash balance
     double cash_ = 0.0;

@@ -51,6 +51,7 @@ set(sources
 	"src/indicators/BasicIndicatorEngine.cpp"
 	"src/indicators/Indicators.cpp"
 	"src/output/ConsoleOutput.cpp"
+	"src/strategy/MovingAverageCrossoverStrategy.cpp"
 	"src/strategy/MovingAverageStrategy.cpp"
 	"src/portfolio/Portfolio.cpp"
 	)

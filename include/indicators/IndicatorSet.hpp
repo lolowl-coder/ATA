@@ -8,9 +8,10 @@
 struct IndicatorKey {
     IndicatorId id;
     int period;   // or more later
+    double value;
 
     bool operator==(const IndicatorKey& other) const noexcept {
-        return id == other.id && period == other.period;
+        return id == other.id && period == other.period && std::abs(value - other.value) < std::numeric_limits<double>::epsilon();
     }
 };
 
@@ -27,6 +28,7 @@ namespace indicators
     static IndicatorKey smaFast = { IndicatorId::SMA, 5 };
     static IndicatorKey smaSlow = { IndicatorId::SMA, 10 };
     static IndicatorKey rsi14 = { IndicatorId::RSI, 14 };
+    static IndicatorKey volat14 = { IndicatorId::Volatility, 14 };
     static IndicatorKey volat20 = { IndicatorId::Volatility, 20 };
 }
 

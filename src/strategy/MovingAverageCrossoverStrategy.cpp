@@ -2,10 +2,12 @@
 
 MovingAverageCrossoverStrategy::MovingAverageCrossoverStrategy(
     int fastPeriod,
-    int slowPeriod
+    int slowPeriod,
+    int volatilityPeriod
 )
     : mFastPeriod(fastPeriod)
     , mSlowPeriod(slowPeriod)
+    , mVolatilityPeriod(volatilityPeriod)
 {
 }
 
@@ -14,26 +16,34 @@ MovingAverageCrossoverStrategy::requiredIndicators() const
 {
     return {
         { IndicatorId::SMA, mFastPeriod },
-        { IndicatorId::SMA, mSlowPeriod }
+        { IndicatorId::SMA, mSlowPeriod },
+        { IndicatorId::Volatility, mVolatilityPeriod }
     };
 }
 
 StrategyDecision
 MovingAverageCrossoverStrategy::evaluate(
-    const StrategyContext&,
+    const StrategyContext& ctx,
     const IndicatorSet& indicators
 ) const
 {
-    StrategyDecision decision;
+    StrategyDecision decision = {};
 
-    if(!indicators.has(IndicatorId::SMA, mFastPeriod) ||
-       !indicators.has(IndicatorId::SMA, mSlowPeriod))
+    if(!indicators.has({ IndicatorId::SMA, mFastPeriod }) ||
+        !indicators.has({ IndicatorId::SMA, mSlowPeriod }) ||
+        !indicators.has({ IndicatorId::Volatility, mVolatilityPeriod }))
     {
         return decision;
     }
 
-    const double fast = indicators.get(IndicatorId::SMA, mFastPeriod);
-    const double slow = indicators.get(IndicatorId::SMA, mSlowPeriod);
+    const double fast = indicators.get({ IndicatorId::SMA, mFastPeriod });
+    const double slow = indicators.get({ IndicatorId::SMA, mSlowPeriod });
+    const double vol = indicators.get({ IndicatorId::Volatility, mVolatilityPeriod });
+
+    if(vol <= 0.0)
+    {
+        return decision;
+    }
 
     if(!mHasPrev)
     {
@@ -49,15 +59,15 @@ MovingAverageCrossoverStrategy::evaluate(
     const bool crossDown =
         (mPrevFast >= mPrevSlow) && (fast < slow);
 
-    if(crossUp)
+    if(crossUp && !ctx.hasPosition)
     {
         decision.action = StrategyAction::Buy;
-        decision.confidence = (fast - slow) / slow;
+        decision.confidence = std::abs(fast - slow) / vol;
     }
-    else if(crossDown)
+    else if(crossDown && ctx.hasPosition)
     {
         decision.action = StrategyAction::Sell;
-        decision.confidence = (slow - fast) / slow;
+        decision.confidence = std::abs(slow - fast) / vol;
     }
 
     mPrevFast = fast;

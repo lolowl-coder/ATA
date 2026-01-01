@@ -3,7 +3,7 @@
 #include "Enums.hpp"
 
 struct StrategyDecision {
-    StrategyAction action;
-    double confidence;   // 0..1 (optional, future-proof)
-    double quantity;    // desired size (units or shares)
+    StrategyAction action = StrategyAction::Hold;
+    double confidence = 0.0;   // 0..1 (optional, future-proof)
+    double quantity = 0.0;    // desired size (units or shares)
 };

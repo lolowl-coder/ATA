@@ -10,16 +10,16 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(doctest)
 
-function(addTest exeName sources)
+function(addTest exeName)
     add_executable(
         ${exeName}
-        ${sources}
+        ${ARGN}
         )
 
     target_sources(
         ${exeName}
 	    PRIVATE
-		    ${sources}
+		    ${ARGN}
 	    )
 
     target_link_libraries(

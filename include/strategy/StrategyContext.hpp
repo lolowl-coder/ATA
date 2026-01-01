@@ -3,4 +3,5 @@
 struct StrategyContext {
     double closePrice;
     size_t index;
+    bool hasPosition;
 };

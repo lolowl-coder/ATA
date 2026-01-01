@@ -6,7 +6,10 @@
 class MovingAverageCrossoverStrategy final : public Strategy
 {
 public:
-    MovingAverageCrossoverStrategy(int fastPeriod, int slowPeriod);
+    MovingAverageCrossoverStrategy(
+        int fastPeriod,
+        int slowPeriod,
+        int volatilityPeriod);
 
     std::vector<IndicatorKey> requiredIndicators() const override;
 
@@ -18,6 +21,7 @@ public:
 private:
     int mFastPeriod;
     int mSlowPeriod;
+    int mVolatilityPeriod;
 
     mutable bool mHasPrev = false;
     mutable double mPrevFast = 0.0;

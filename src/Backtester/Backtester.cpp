@@ -27,7 +27,8 @@ void Backtester::run(
             IndicatorSet indicators = indicatorEngine_.compute(series, i, required);
             StrategyContext ctx{
                 series.bars[i].close,
-                i
+                i,
+				portfolio_.positionQuantity(symbol) > 0.0
 		    };
             StrategyDecision decision = strategy.evaluate(ctx, indicators);
             

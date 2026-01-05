@@ -16,14 +16,31 @@ TEST_CASE("SMA sliding window") {
     CHECK(Indicators::sma(v, 3) == doctest::Approx(4.0));
 }
 
-TEST_CASE("Volatility zero") {
-    std::vector<double> v{5, 5, 5, 5};
-    CHECK(Indicators::volatility(v, 4) == doctest::Approx(0.0));
-}
-
 TEST_CASE("SMA invalid window") {
     std::vector<double> v{1, 2, 3};
     CHECK_THROWS_AS(Indicators::sma(v, 5), std::invalid_argument);
+}
+
+TEST_CASE("EMA undefined before warm-up") {
+    std::vector<double> v{ 1, 2 };
+    CHECK(std::isnan(Indicators::ema(v, 3)));
+}
+
+TEST_CASE("EMA equals SMA at first valid index") {
+    std::vector<double> v{ 1, 2, 3 };
+    CHECK(Indicators::ema(v, 3) == doctest::Approx(2.0));
+}
+
+TEST_CASE("EMA basic correctness") {
+    std::vector<double> v{ 1, 2, 3, 4, 5 };
+    const int window = 3;
+    const double ema = Indicators::ema(v, window);
+    CHECK(ema == doctest::Approx(4.0));
+}
+
+TEST_CASE("Volatility zero") {
+    std::vector<double> v{5, 5, 5, 5};
+    CHECK(Indicators::volatility(v, 4) == doctest::Approx(0.0));
 }
 
 TEST_CASE("RSI rising prices") {

@@ -46,6 +46,7 @@ static const char* strategyActionToString(StrategyAction value)
 
 #define INDICATOR_ID \
 	X(SMA) \
+	X(EMA) \
 	X(RSI) \
 	X(Volatility)
 

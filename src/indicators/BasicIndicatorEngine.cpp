@@ -19,6 +19,9 @@ IndicatorSet BasicIndicatorEngine::compute(
         case IndicatorId::SMA:
             set.set(k, Indicators::sma(closes, k.period));
             break;
+        case IndicatorId::EMA:
+            set.set(k, Indicators::ema(closes, k.period));
+            break;
         case IndicatorId::RSI:
             set.set(k, Indicators::rsi(closes, k.period));
             break;

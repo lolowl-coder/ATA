@@ -3,48 +3,55 @@
 std::vector<IndicatorKey> EMACrossoverStrategy::requiredIndicators() const
 {
     return {
-        IndicatorKey::ema({ IndicatorId::SMA, mFastPeriod } ),
-        IndicatorKey::ema({ IndicatorId::SMA, mSlowPeriod } ),
-        IndicatorKey::volatility(mVolatilityWindow)
+        { IndicatorId::EMA, mFastPeriod },
+        { IndicatorId::EMA, mSlowPeriod },
+        { IndicatorId::Volatility, mVolatilityPeriod }
     };
 }
 
-StrategyDecision MaCrossoverStrategy::evaluate(
+StrategyDecision EMACrossoverStrategy::evaluate(
     const StrategyContext& ctx,
     const IndicatorSet& indicators
 ) const
 {
-    const double fast =
-        indicators.get( { IndicatorId::SMA, mFastPeriod } );
+    StrategyDecision decision = {};
 
-    const double slow =
-        indicators.get( { IndicatorId::SMA, mSlowPeriod } );
+	const double fast =
+		indicators.get({ IndicatorId::EMA, mFastPeriod });
 
-    const double prevFast =
-        indicators.getPrev("ema_fast");
+	const double slow =
+		indicators.get({ IndicatorId::EMA, mSlowPeriod });
 
-    const double prevSlow =
-        indicators.getPrev("ema_slow");
+	const double prevFast =
+		indicators.get({ IndicatorId::EMA, mFastPeriod });
+
+	const double prevSlow =
+		indicators.get({ IndicatorId::EMA, mSlowPeriod });
 
     const double volatility =
-        indicators.get("volatility");
+        indicators.get({ IndicatorId::Volatility, mVolatilityPeriod });
 
-    if(volatility < mMinVolatility)
-        return StrategyDecision::none();
+    if (volatility < mMinVolatility) {
+        decision.action = StrategyAction::Hold;
+    }
+    else {
+        const bool crossedUp =
+            prevFast <= prevSlow &&
+            fast > slow;
 
-    const bool crossedUp =
-        prevFast <= prevSlow &&
-        fast > slow;
+        const bool crossedDown =
+            prevFast >= prevSlow &&
+            fast < slow;
 
-    const bool crossedDown =
-        prevFast >= prevSlow &&
-        fast < slow;
+        if (crossedUp && !ctx.hasPosition) {
+            decision.action = StrategyAction::Buy;
+        }
+        else {
+            if (crossedDown && ctx.hasPosition) {
+                decision.action = StrategyAction::Sell;
+            }
+        }
+    }
 
-    if(crossedUp && !ctx.hasPosition)
-        return StrategyDecision::buy();
-
-    if(crossedDown && ctx.hasPosition)
-        return StrategyDecision::sell();
-
-    return StrategyDecision::none();
+    return decision;
 }

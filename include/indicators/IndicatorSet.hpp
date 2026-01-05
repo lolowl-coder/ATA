@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Enums.hpp"
+
 #include <unordered_map>
 
 // IndicatorKey uniquely identifies a single indicator instance.

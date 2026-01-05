@@ -27,6 +27,7 @@ void Backtester::run(
             IndicatorSet indicators = indicatorEngine_.compute(series, i, required);
             StrategyContext ctx{
                 series.bars[i].close,
+                indicators.get({ IndicatorId::Volatility, static_cast<int>(endIndex - startIndex) }),
                 i,
 				portfolio_.positionQuantity(symbol) > 0.0
 		    };

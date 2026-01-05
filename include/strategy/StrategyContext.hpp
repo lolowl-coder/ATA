@@ -2,7 +2,7 @@
 
 struct StrategyContext {
     double closePrice;
-    double volatilituy;
+    double volatility;
     size_t index;
     bool hasPosition;
 };

@@ -1,24 +1,28 @@
 #pragma once
 
+#include "indicators/IndicatorSet.hpp"
 #include "strategy/Strategy.hpp"
+#include "Enums.hpp"
+
+#include <vector>
 
 class EMACrossoverStrategy : public Strategy
 {
 public:
     EMACrossoverStrategy(
-        size_t fastPeriod,
-        size_t slowPeriod,
-        size_t volatilityWindow,
+        int fastPeriod,
+        int slowPeriod,
+        int volatilityWindow,
         double minVolatility)
         :
-        mFastEma(fastPeriod),
-        mSlowEma(slowPeriod),
-        mVolatilityWindow(volatilityWindow),
+        mFastPeriod(fastPeriod),
+        mSlowPeriod(slowPeriod),
+        mVolatilityPeriod(volatilityWindow),
         mMinVolatility(minVolatility)
     {
     }
 
-    std::vector<IndicatorKey> EMACrossoverStrategy::requiredIndicators() const override;
+    std::vector<IndicatorKey> requiredIndicators() const override;
 
     virtual StrategyDecision evaluate(
         const StrategyContext& ctx,
@@ -26,11 +30,10 @@ public:
     ) const override;
 
 private:
-    size_t mFastEma;
-    size_t mSlowEma;
-    size_t mVolatilityWindow;
+    int mFastPeriod;
+    int mSlowPeriod;
+    int mVolatilityPeriod;
     double mMinVolatility;
-    RollingVolatility mVolatility;
 
     double mPrevFast = 0.0;
     double mPrevSlow = 0.0;

@@ -6,7 +6,7 @@
 TEST_CASE("Position-aware BUY only when flat")
 {
     MovingAverageCrossoverStrategy strategy(5, 10, 14);
-    StrategyContext ctx{100.0, 0, false};
+    StrategyContext ctx{100.0, 0, 0, false};
 
     IndicatorSet ind;
 
@@ -31,7 +31,7 @@ TEST_CASE("No BUY if already in position")
     ind.set(indicators::smaSlow, 100.0);
     ind.set(indicators::volat14, 2.0);
 
-    StrategyContext ctx{100.0, 0, true};
+    StrategyContext ctx{100.0, 0, 0, true};
     strategy.evaluate(ctx, ind);
 
     ind.set(indicators::smaFast, 101.0);
@@ -49,7 +49,7 @@ TEST_CASE("Position-aware SELL only when holding")
     ind.set(indicators::smaSlow, 100.0);
     ind.set(indicators::volat14, 2.0);
 
-    StrategyContext ctx{100.0, 0, true};
+    StrategyContext ctx{100.0, 0, 0, true};
     strategy.evaluate(ctx, ind);
 
     ind.set(indicators::smaFast, 99.0);

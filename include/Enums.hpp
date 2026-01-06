@@ -11,17 +11,6 @@ enum class Timeframe {
 	#undef X
 };
 
-static const char* timeFrameToString(Timeframe value)
-{
-	switch (value) {
-		#define X(value) case Timeframe::value: return #value;
-		TIME_FRAME
-		#undef X
-		default:
-			return "Unknown Time frame";
-	}
-}
-
 #define STRATEGY_ACTION \
 	X(Buy) \
 	X(Sell) \

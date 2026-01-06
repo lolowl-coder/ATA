@@ -79,15 +79,15 @@ TEST_CASE("BasicIndicatorEngine computes MA at given index")
     const size_t index = series.bars.size() - 1;
 
     BasicIndicatorEngine engine;
-    IndicatorSet result = engine.compute(series, index, { indicators::smaFast });
+    IndicatorSet result = engine.compute(series, index, { indicators::smaFast5 });
 
-    REQUIRE(result.has({ indicators::smaFast }));
+    REQUIRE(result.has({ indicators::smaFast5 }));
 
     // Expected MA of [6,7,8,9,10]
     const double expected_ma =
         (6.0 + 7.0 + 8.0 + 9.0 + 10.0) / 5.0;
 
-    CHECK(result.get(indicators::smaFast) == doctest::Approx(expected_ma));
+    CHECK(result.get(indicators::smaFast5) == doctest::Approx(expected_ma));
 }
 
 TEST_CASE("BasicIndicatorEngine skips MA if index too small")
@@ -100,10 +100,10 @@ TEST_CASE("BasicIndicatorEngine skips MA if index too small")
     BasicIndicatorEngine engine;
     IndicatorSet result;
     CHECK_THROWS_AS(
-        result = engine.compute(series, index, { indicators::smaFast }),
+        result = engine.compute(series, index, { indicators::smaFast5 }),
         std::invalid_argument);
 
-    CHECK_FALSE(result.has(indicators::smaFast));
+    CHECK_FALSE(result.has(indicators::smaFast5));
 }
 
 TEST_CASE("BasicIndicatorEngine computes multiple requested indicators")
@@ -112,10 +112,10 @@ TEST_CASE("BasicIndicatorEngine computes multiple requested indicators")
 
     BasicIndicatorEngine engine;
     const size_t index = series.bars.size() - 1;
-    auto required = { indicators::smaSlow, indicators::rsi14 };
+    auto required = { indicators::smaSlow10, indicators::rsi14 };
     IndicatorSet result = engine.compute(series, index, required);
 
-    CHECK(result.has(indicators::smaSlow));
+    CHECK(result.has(indicators::smaSlow10));
     CHECK(result.has(indicators::rsi14));
 }
 
@@ -129,9 +129,9 @@ TEST_CASE("BasicIndicatorEngine does not compute unrequested indicators")
     const size_t index = series.bars.size() - 1;
 
     BasicIndicatorEngine engine;
-    IndicatorSet result = engine.compute(series, index, { indicators::smaFast });
+    IndicatorSet result = engine.compute(series, index, { indicators::smaFast5 });
 
-    CHECK(result.has(indicators::smaFast));
+    CHECK(result.has(indicators::smaFast5));
     CHECK_FALSE(result.has(indicators::rsi14));
     CHECK_FALSE(result.has(indicators::volat20));
 }

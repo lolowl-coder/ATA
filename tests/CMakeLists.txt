@@ -36,9 +36,6 @@ function(addTest exeName)
 
 endfunction()
 
-set(
-    testSources
-    )
 # Indicators
 addTest(
     TestIndicators
@@ -46,9 +43,12 @@ addTest(
     )
 # Strategies
 addTest(
-    TestStrategies
+    TestMovingAverage
     "strategy/TestMovingAverage.cpp"
-    "strategy/TestMovingAverageCrossover.cpp"
+    )
+addTest(
+    TestCrossover
+    "strategy/TestCrossover.cpp"
     )
 # Backtester
 addTest(

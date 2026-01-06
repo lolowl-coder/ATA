@@ -19,7 +19,7 @@ public:
     {}
 
     std::vector<IndicatorKey> requiredIndicators() const override {
-        return {}; // no indicators needed
+        return { { IndicatorId::Volatility, 1, 0.0 } }; // no indicators needed
     }
 
     StrategyDecision evaluate(

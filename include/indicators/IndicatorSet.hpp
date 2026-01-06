@@ -27,8 +27,8 @@ struct IndicatorKeyHash {
 
 namespace indicators
 {
-    static IndicatorKey smaFast = { IndicatorId::SMA, 5 };
-    static IndicatorKey smaSlow = { IndicatorId::SMA, 10 };
+    static IndicatorKey smaFast5 = { IndicatorId::SMA, 5 };
+    static IndicatorKey smaSlow10 = { IndicatorId::SMA, 10 };
     static IndicatorKey rsi14 = { IndicatorId::RSI, 14 };
     static IndicatorKey volat14 = { IndicatorId::Volatility, 14 };
     static IndicatorKey volat20 = { IndicatorId::Volatility, 20 };

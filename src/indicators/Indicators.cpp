@@ -32,8 +32,8 @@ double ema(const std::vector<double>& values, size_t window) {
         ema /= window;
 
         // Apply EMA forward
-        for (size_t i = values.size() - window; i < values.size(); ++i) {
-            ema = alpha * values[i] * (1.0 - alpha) * ema;
+        for (size_t i = window; i < values.size(); ++i) {
+            ema = alpha * values[i] + (1.0 - alpha) * ema;
         }
     }
 

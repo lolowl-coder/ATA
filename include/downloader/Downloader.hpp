@@ -12,5 +12,5 @@ public:
     virtual MarketSeries download(
         const std::string& symbol,
         Timeframe timeframe
-    ) = 0;
+    ) const = 0;
 };

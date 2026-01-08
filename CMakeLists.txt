@@ -27,6 +27,7 @@ set(headers
 	"include/core/MarketData.hpp"
 	"include/core/Types.hpp"
 	"include/downloader/AlphaVantageDownloader.hpp"
+	"include/downloader/AlphaVantageParser.hpp"
 	"include/downloader/Downloader.hpp"
 	"include/indicators/BasicIndicatorEngine.hpp"
 	"include/indicators/IndicatorEngine.hpp"
@@ -42,18 +43,21 @@ set(headers
 	"include/strategy/Strategy.hpp"
 	"include/strategy/StrategyContext.hpp"
 	"include/strategy/StrategyDecision.hpp"
+	"include/utils/TimeUtils.hpp"
 	"include/Enums.hpp"
 	)
 
 set(sources
 	"src/backtester/Backtester.cpp"
-	
+	"src/downloader/AlphaVantageDownloader.cpp"
+	"src/downloader/AlphaVantageParser.cpp"
 	"src/indicators/BasicIndicatorEngine.cpp"
 	"src/indicators/Indicators.cpp"
 	"src/output/ConsoleOutput.cpp"
 	"src/strategy/CrossoverStrategy.cpp"
 	"src/strategy/MovingAverageStrategy.cpp"
 	"src/portfolio/Portfolio.cpp"
+	"src/utils/TimeUtils.cpp"
 	)
 
 add_library(ATA)

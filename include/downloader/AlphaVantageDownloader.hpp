@@ -1,16 +1,16 @@
 #pragma once
 
-#include "Downloader/Downloader.hpp"
+#include "downloader/Downloader.hpp"
 
-class AlphaVantageDownloader : public Downloader {
+class AlphaVantageDownloader final : public Downloader {
 public:
     explicit AlphaVantageDownloader(std::string apiKey);
 
     MarketSeries download(
         const std::string& symbol,
         Timeframe timeframe
-    ) override;
+    ) const override;
 
 private:
-    std::string apiKey_;
+    std::string mApiKey;
 };

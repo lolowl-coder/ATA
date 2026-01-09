@@ -1,5 +1,5 @@
 #include "downloader/AlphaVantageParser.hpp"
-#include "TimeUtils.hpp"
+#include "utils/TimeUtils.hpp"
 
 #include <nlohmann/json.hpp>
 #include <algorithm>

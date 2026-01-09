@@ -2,4 +2,4 @@
 
 #include <chrono>
 
-using TimePoint = std::chrono::time_point<std::chrono::system_clock>;
+using TimePoint = std::chrono::system_clock::time_point;

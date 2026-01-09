@@ -18,6 +18,11 @@ else()
     add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+include(FetchContent)
+
+FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
+FetchContent_MakeAvailable(json)
+
 # ---- Library target (headers only for now) ----------------------------
 
 set(headers
@@ -73,6 +78,8 @@ target_include_directories(ATA
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
+
+target_link_libraries(ATA PRIVATE nlohmann_json::nlohmann_json)
 
 # ---- Testing ----------------------------------------------------------
 

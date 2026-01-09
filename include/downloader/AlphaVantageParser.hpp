@@ -5,7 +5,7 @@
 #include <vector>
 #include <stdexcept>
 
-#include "MarketData.hpp"
+#include "core/MarketData.hpp"
 
 class AlphaVantageParser {
 public:

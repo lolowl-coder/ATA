@@ -1,16 +1,30 @@
 #pragma once
 
-#include "downloader/Downloader.hpp"
+#include "core/MarketData.hpp"
+#include "downloader/IHttpClient.hpp"
+#include "Enums.hpp"
 
-class AlphaVantageDownloader final : public Downloader {
+#include <memory>
+#include <string>
+
+class AlphaVantageDownloader {
 public:
-    explicit AlphaVantageDownloader(std::string apiKey);
+    AlphaVantageDownloader(
+        std::string apiKey,
+        std::unique_ptr<IHttpClient> http
+    );
 
     MarketSeries download(
         const std::string& symbol,
         Timeframe timeframe
-    ) const override;
+    ) const;
 
 private:
     std::string mApiKey;
+    std::unique_ptr<IHttpClient> mHttp;
+
+    std::string buildUrl(
+        const std::string& symbol,
+        Timeframe timeframe
+    ) const;
 };

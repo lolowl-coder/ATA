@@ -1,20 +1,33 @@
 #pragma once
 
-#include "storage/Storage.hpp"
-#include "core/MarketData.hpp"
-#include "core/Types.hpp"
-#include "Enums.hpp"
-
 #include <string>
+#include <optional>
 
-class SQLiteStorage : public Storage {
+#include "core/MarketData.hpp"
+
+class SQLiteStorage {
 public:
     explicit SQLiteStorage(const std::string& dbPath);
+    ~SQLiteStorage();
 
-    void save(const MarketSeries& series) override;
-    MarketSeries load(const std::string& symbol, Timeframe timeframe) override;
-    TimePoint lastUpdate(const std::string& symbol, Timeframe timeframe) override;
+    void store(const MarketSeries& series);
+
+    MarketSeries load(
+        const std::string& symbol,
+        Timeframe timeframe
+    ) const;
+
+    std::optional<TimePoint> lastTimestamp(
+        const std::string& symbol,
+        Timeframe timeframe
+    ) const;
 
 private:
-    std::string dbPath_;
+    void open(const std::string& path);
+    void initSchema();
+
+    void exec(const std::string& sql) const;
+
+private:
+    void* mDb = nullptr; // sqlite3*
 };

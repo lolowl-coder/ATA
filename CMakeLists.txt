@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.20)
 
 project(ATA
     VERSION 0.1.0
-    LANGUAGES CXX
+    LANGUAGES C CXX
 )
 
 # ---- Global settings -------------------------------------------------
@@ -22,6 +22,30 @@ include(FetchContent)
 
 FetchContent_Declare(json URL https://github.com/nlohmann/json/releases/download/v3.12.0/json.tar.xz)
 FetchContent_MakeAvailable(json)
+
+FetchContent_Declare(
+    sqlite3
+    URL https://www.sqlite.org/2026/sqlite-amalgamation-3510200.zip
+)
+
+FetchContent_MakeAvailable(sqlite3)
+
+add_library(sqlite3 STATIC
+    ${sqlite3_SOURCE_DIR}/sqlite3.c
+)
+
+target_compile_definitions(sqlite3
+    PRIVATE
+        SQLITE_THREADSAFE=1
+        SQLITE_ENABLE_FTS5
+        SQLITE_ENABLE_JSON1
+)
+
+set_target_properties(sqlite3 PROPERTIES
+    POSITION_INDEPENDENT_CODE ON
+)
+
+target_include_directories(sqlite3 PUBLIC ${sqlite3_SOURCE_DIR})
 
 # ---- Library target (headers only for now) ----------------------------
 
@@ -61,6 +85,7 @@ set(sources
 	"src/output/ConsoleOutput.cpp"
 	"src/strategy/CrossoverStrategy.cpp"
 	"src/strategy/MovingAverageStrategy.cpp"
+	"src/storage/SQLiteStorage.cpp"
 	"src/portfolio/Portfolio.cpp"
 	"src/utils/TimeUtils.cpp"
 	)
@@ -79,7 +104,11 @@ target_include_directories(ATA
         ${CMAKE_CURRENT_SOURCE_DIR}/include
 )
 
-target_link_libraries(ATA PRIVATE nlohmann_json::nlohmann_json)
+target_link_libraries(ATA
+	PRIVATE
+		nlohmann_json::nlohmann_json
+		sqlite3
+)
 
 # ---- Testing ----------------------------------------------------------
 

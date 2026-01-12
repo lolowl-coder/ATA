@@ -72,3 +72,8 @@ addTest(
     TestAlphaVantageDownloader
     "downloader/TestAlphaVantageDownloader.cpp"
     )
+#storage
+addTest(
+    TestSQLiteStorage
+    "storage/TestSQLiteStorage.cpp"
+    )

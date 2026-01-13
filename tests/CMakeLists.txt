@@ -72,7 +72,12 @@ addTest(
     TestAlphaVantageDownloader
     "downloader/TestAlphaVantageDownloader.cpp"
     )
-#storage
+# Market Data Updater
+addTest(
+    TestMarketDataUpdater
+    "storage/TestMarketDataUpdater.cpp"
+    )
+# Storage
 addTest(
     TestSQLiteStorage
     "storage/TestSQLiteStorage.cpp"

@@ -22,6 +22,12 @@ public:
         Timeframe timeframe
     ) const;
 
+    void insertBar(const std::string& symbol,
+                   Timeframe tf,
+                   const Bar& bar);
+
+    size_t countBars(const std::string& symbol, Timeframe tf);
+
 private:
     void open(const std::string& path);
     void initSchema();

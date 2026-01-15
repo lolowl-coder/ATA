@@ -14,7 +14,7 @@ public:
         std::unique_ptr<IHttpClient> http
     );
 
-    MarketSeries download(
+    virtual MarketSeries download(
         const std::string& symbol,
         Timeframe timeframe
     ) const;

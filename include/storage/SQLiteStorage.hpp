@@ -17,7 +17,7 @@ public:
         Timeframe timeframe
     ) const;
 
-    std::optional<TimePoint> lastTimestamp(
+    std::optional<TimePoint> getLastTimestamp(
         const std::string& symbol,
         Timeframe timeframe
     ) const;
@@ -26,7 +26,7 @@ public:
                    Timeframe tf,
                    const Bar& bar);
 
-    size_t countBars(const std::string& symbol, Timeframe tf);
+    size_t countBars(const std::string& symbol, Timeframe tf) const;
 
 private:
     void open(const std::string& path);

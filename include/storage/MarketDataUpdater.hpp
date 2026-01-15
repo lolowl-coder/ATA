@@ -12,8 +12,7 @@ class MarketDataUpdater {
 public:
     MarketDataUpdater(
         AlphaVantageDownloader& downloader,
-        SQLiteStorage& storage,
-        size_t dailyRequestLimit = 25
+        SQLiteStorage& storage
     );
 
     void updateDailyCompact(const std::string& symbol);
@@ -28,5 +27,4 @@ private:
 private:
     AlphaVantageDownloader& mDownloader;
     SQLiteStorage& mStorage;
-    size_t mDailyRequestLimit;
 };

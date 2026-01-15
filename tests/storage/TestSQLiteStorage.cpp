@@ -45,7 +45,7 @@ TEST_CASE("SQLiteStorage resume timestamp")
 
     storage.store(s);
 
-    const auto ts = storage.lastTimestamp("AAPL", Timeframe::Daily);
+    const auto ts = storage.getLastTimestamp("AAPL", Timeframe::Daily);
 
     REQUIRE(ts.has_value());
     CHECK(ts->time_since_epoch() == std::chrono::seconds(200));

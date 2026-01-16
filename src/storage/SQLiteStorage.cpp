@@ -22,7 +22,16 @@ TimePoint fromEpoch(int64_t v)
 SQLiteStorage::SQLiteStorage(const std::string& dbPath)
 {
     open(dbPath);
+    setupPragmas();
     initSchema();
+}
+
+void SQLiteStorage::setupPragmas()
+{
+	auto* db = static_cast<sqlite3*>(mDb);
+    sqlite3_exec(db, "PRAGMA journal_mode=WAL;", nullptr, nullptr, nullptr);
+    sqlite3_exec(db, "PRAGMA synchronous=NORMAL;", nullptr, nullptr, nullptr);
+    sqlite3_exec(db, "PRAGMA foreign_keys=ON;", nullptr, nullptr, nullptr);
 }
 
 SQLiteStorage::~SQLiteStorage()

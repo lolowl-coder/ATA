@@ -8,6 +8,7 @@
 class SQLiteStorage {
 public:
     explicit SQLiteStorage(const std::string& dbPath);
+    void setupPragmas();
     ~SQLiteStorage();
 
     void store(const MarketSeries& series);

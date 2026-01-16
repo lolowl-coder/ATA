@@ -50,3 +50,32 @@ TEST_CASE("SQLiteStorage resume timestamp")
     REQUIRE(ts.has_value());
     CHECK(ts->time_since_epoch() == std::chrono::seconds(200));
 }
+
+TEST_CASE("SQLiteStorage file persistence")
+{
+    const std::string dbPath = "test_marketdata.sqlite";
+
+	const Timeframe tf = Timeframe::Daily;
+    {
+        SQLiteStorage storage(dbPath);
+
+        Bar b;
+        b.ts = TimePoint{std::chrono::seconds{1}};
+        b.open = 1.0;
+        b.high = 2.0;
+        b.low = 0.5;
+        b.close = 1.5;
+        b.volume = 100;
+
+
+        storage.insertBar("AAPL", tf, b);
+        CHECK(storage.countBars("AAPL", tf) == 1);
+    }
+
+    {
+        SQLiteStorage storage(dbPath);
+        CHECK(storage.countBars("AAPL", tf) == 1);
+    }
+
+    std::remove(dbPath.c_str());
+}

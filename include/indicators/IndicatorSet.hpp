@@ -42,7 +42,7 @@ public:
 
     double get(const IndicatorKey& key) const {
         // get() requires has() to be checked first.
-        return values_.at(key);
+        return has(key) ? values_.at(key) : 0.0;
     }
 
     void set(const IndicatorKey& key, double value) {

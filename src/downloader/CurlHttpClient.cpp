@@ -1,4 +1,4 @@
-#include "CurlHttpClient.hpp"
+#include "downloader/CurlHttpClient.hpp"
 
 #include <curl/curl.h>
 #include <stdexcept>

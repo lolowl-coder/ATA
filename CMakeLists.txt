@@ -47,6 +47,23 @@ set_target_properties(sqlite3 PROPERTIES
 
 target_include_directories(sqlite3 PUBLIC ${sqlite3_SOURCE_DIR})
 
+FetchContent_Declare(
+    curl
+    GIT_REPOSITORY https://github.com/curl/curl.git
+    GIT_TAG curl-8_18_0
+)
+
+set(BUILD_CURL_EXE OFF CACHE BOOL "" FORCE)
+set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+#set(CURL_USE_OPENSSL ON CACHE BOOL "" FORCE)
+set(CURL_USE_SCHANNEL ON)
+set(CURL_USE_OPENSSL OFF)
+set(CURL_DISABLE_TESTS ON CACHE BOOL "" FORCE)
+set(CURL_USE_LIBPSL OFF CACHE BOOL "" FORCE)
+
+
+FetchContent_MakeAvailable(curl)
+
 # ---- Library target (headers only for now) ----------------------------
 
 set(headers
@@ -58,6 +75,8 @@ set(headers
 	"include/downloader/AlphaVantageDownloader.hpp"
 	"include/downloader/AlphaVantageParser.hpp"
 	"include/downloader/Downloader.hpp"
+	"include/downloader/CurlHttpClient.hpp"
+	"include/downloader/IHttpClient.hpp"
 	"include/indicators/BasicIndicatorEngine.hpp"
 	"include/indicators/IndicatorEngine.hpp"
 	"include/indicators/Indicators.hpp"
@@ -80,6 +99,7 @@ set(sources
 	"src/backtester/Backtester.cpp"
 	"src/downloader/AlphaVantageDownloader.cpp"
 	"src/downloader/AlphaVantageParser.cpp"
+	"src/downloader/CurlHttpClient.cpp"
 	"src/indicators/BasicIndicatorEngine.cpp"
 	"src/indicators/Indicators.cpp"
 	"src/output/ConsoleOutput.cpp"
@@ -109,7 +129,20 @@ target_link_libraries(ATA
 	PRIVATE
 		nlohmann_json::nlohmann_json
 		sqlite3
+		libcurl
 )
+
+add_executable(Backtest src/main.cpp)
+target_include_directories(Backtest
+	PUBLIC
+		${CMAKE_CURRENT_SOURCE_DIR}/include
+)
+target_link_libraries(Backtest
+	PRIVATE
+		ATA
+)
+
+set_property(TARGET Backtest PROPERTY VS_STARTUP_PROJECT TRUE)
 
 # ---- Testing ----------------------------------------------------------
 

@@ -19,7 +19,7 @@ class Output {
 public:
     virtual ~Output() = default;
 
-    virtual void onBar(const OutputEventContext& ctx, const PriceSnapshot& priceSnapshot) {}
-    virtual void onTrade(const OutputEventContext& ctx, const PriceSnapshot& priceSnapshot) {}
-    virtual void onFinish(const Portfolio& portfolio, const PriceSnapshot& priceSnapshot) = 0;
+    virtual void onBar(const OutputEventContext&, const PriceSnapshot&) {}
+    virtual void onTrade(const OutputEventContext&, const PriceSnapshot&) {}
+    virtual void onFinish(const Portfolio&, const PriceSnapshot&) = 0;
 };

@@ -52,7 +52,7 @@ std::string AlphaVantageDownloader::buildUrl(
             "?function=TIME_SERIES_DAILY"
             "&symbol=" + symbol +
             "&apikey=" + mApiKey +
-            "&outputsize=full";
+            "&outputsize=compact";
     }
 
     return
@@ -61,5 +61,5 @@ std::string AlphaVantageDownloader::buildUrl(
         "&symbol=" + symbol +
         "&interval=" + intervalString(timeframe) +
         "&apikey=" + mApiKey +
-        "&outputsize=full";
+        "&outputsize=compact";
 }

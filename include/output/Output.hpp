@@ -9,7 +9,8 @@
 
 struct OutputEventContext
 {
-    TimePoint ts;
+    const std::string symbol;
+    const TimePoint ts;
     const StrategyContext strategyCtx;
     const StrategyDecision& decision;
     const Portfolio portfolio;

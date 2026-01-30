@@ -11,5 +11,7 @@ public:
         const MarketSeries& series,
         size_t index,
         const std::vector<IndicatorKey>& required
-    ) const = 0;
+    ) = 0;
+    virtual void resetVolatilityHistory() = 0;
+    virtual void resetATRHistory() = 0;
 };

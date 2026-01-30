@@ -5,11 +5,11 @@ StrategyDecision MovingAverageStrategy::evaluate(
     const IndicatorSet& indicators
 ) const
 {
-    if (!indicators.has(indicators::smaFast5)) {
+    if (!indicators.has(indicators::ema5)) {
         return {StrategyAction::Hold, 0.0};
     }
 
-    const double ma = indicators.get(indicators::smaFast5);
+    const double ma = indicators.get(indicators::ema5);
 
     // TEMPORARY sizing rule (explicitly acknowledged)
     const double baseQty = 1.0;

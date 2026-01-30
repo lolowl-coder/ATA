@@ -39,6 +39,12 @@ function(addTest exeName)
 
 endfunction()
 
+# Math
+addTest(
+    TestMath
+    "core/TestMath.cpp"
+    )
+
 # Indicators
 addTest(
     TestIndicators

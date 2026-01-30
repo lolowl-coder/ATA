@@ -34,7 +34,10 @@ double Portfolio::equity(const PriceSnapshot& priceSnapshot) const {
     double totalEquity = cash_;
     
     for (const auto& [symbol, pos] : positions_) {
-        totalEquity += pos.quantity * priceSnapshot.prices.at(symbol); // Simplified: using avgPrice as current price
+        if(priceSnapshot.prices.find(symbol) != priceSnapshot.prices.end())
+        {
+            totalEquity += pos.quantity * priceSnapshot.prices.at(symbol); // Simplified: using avgPrice as current price
+        }
     }
 
     return totalEquity;

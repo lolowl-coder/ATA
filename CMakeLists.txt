@@ -32,7 +32,7 @@ FetchContent_MakeAvailable(sqlite3)
 
 add_library(sqlite3 STATIC
     ${sqlite3_SOURCE_DIR}/sqlite3.c
-)
+ )
 
 target_compile_definitions(sqlite3
     PRIVATE
@@ -71,6 +71,7 @@ set(headers
 	"include/backtester/CapitalAllocator.hpp"
 	"include/backtester/FixedFractionalAllocator.hpp"
 	"include/core/MarketData.hpp"
+	"include/core/Math.hpp"
 	"include/core/Types.hpp"
 	"include/downloader/AlphaVantageDownloader.hpp"
 	"include/downloader/AlphaVantageParser.hpp"
@@ -97,6 +98,7 @@ set(headers
 
 set(sources
 	"src/backtester/Backtester.cpp"
+	"src/core/Math.cpp"
 	"src/downloader/AlphaVantageDownloader.cpp"
 	"src/downloader/AlphaVantageParser.cpp"
 	"src/downloader/CurlHttpClient.cpp"
@@ -118,7 +120,7 @@ target_sources(ATA
 		${sources}
 	PUBLIC
 		${headers}
-	)
+	 )
 
 target_include_directories(ATA
     PUBLIC

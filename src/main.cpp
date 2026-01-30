@@ -7,9 +7,11 @@
 #include "output/ConsoleOutput.hpp"
 #include "portfolio/Portfolio.hpp"
 #include "strategy/MovingAverageStrategy.hpp"
+#include "strategy/CrossoverStrategy.hpp"
 #include "storage/SQLiteStorage.hpp"
 
 #include <memory>
+#include <iostream>
 
 void updateMarketData(
     SQLiteStorage& storage,
@@ -35,25 +37,57 @@ int main()
     Backtester bt(portfolio, engine, output);
     SQLiteStorage storage("at.sqlite");
     
-    const std::string symbol = "NVDA";
+    std::vector<std::string> symbols =
+    {
+        "AMZN",
+        "CRWD",
+        "ENB",
+        "KEY",
+        "KILO-B.TRT",
+        "LAKE",
+        "TSLA",
+        "NVDA",
+        "PLTR"
+    };
 	const Timeframe timeframe = Timeframe::Daily;
 
-    /*updateMarketData(
-        storage,
-        symbol,
-        timeframe
-	);*/
+    const float risk = 0.4f; // 20% risk per trade
+    const size_t maxPositions = 10;
+    FixedFractionalAllocator capitalAllocator(risk, maxPositions);
 
-    MarketSeries series = storage.load(symbol, timeframe);
-    MarketData marketData = { series };
+	for(auto& symbol : symbols)
+    {
+		std::cout << "Running backtest for " << symbol << "...\n";
+        //if(storage.getLastTimestamp(symbol, timeframe) )
+        if(symbol == "")
+        {
+            updateMarketData(
+                storage,
+                symbol,
+                timeframe
+            );
+        }
 
-    MovingAverageStrategy maStrategy;
+        MarketSeries series = storage.load(symbol, timeframe);
+        if(!series.bars.empty())
+        {
+            MarketData marketData = { series };
+            engine.resetVolatilityHistory();
+            engine.resetATRHistory();
+            CrossoverStrategy strategy(
+                indicators::sma5,
+                indicators::sma10,
+                indicators::volat14,
+                indicators::volat20,
+                indicators::volatPercentile50_50,
+                indicators::atr14,
+                indicators::atrPercentile14_40
+                );
+			//MovingAverageStrategy strategy;
 
-	const float risk = 0.2f; // 20% risk per trade
-	const size_t maxPositions = 4;
-	FixedFractionalAllocator capitalAllocator(risk, maxPositions);
-
-    bt.run(symbol, marketData, maStrategy, capitalAllocator, 4, series.bars.size() - 1);
+            bt.run(symbol, marketData, strategy, capitalAllocator, strategy.getMaxPeriod() - 1, series.bars.size() - 1);
+        }
+    }
 	
 	return 0;
 }

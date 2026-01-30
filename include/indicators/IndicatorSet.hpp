@@ -10,6 +10,7 @@
 struct IndicatorKey {
     IndicatorId id;
     int period;   // or more later
+    double param0;
     double value;
 
     bool operator==(const IndicatorKey& other) const noexcept {
@@ -27,15 +28,26 @@ struct IndicatorKeyHash {
 
 namespace indicators
 {
-    static IndicatorKey smaFast5 = { IndicatorId::SMA, 5 };
-    static IndicatorKey smaSlow10 = { IndicatorId::SMA, 10 };
+    static IndicatorKey sma5 = { IndicatorId::SMA, 5 };
+    static IndicatorKey sma10 = { IndicatorId::SMA, 10 };
+    static IndicatorKey sma50 = { IndicatorId::SMA, 50 };
+    static IndicatorKey ema5 = { IndicatorId::EMA, 5 };
+    static IndicatorKey ema10 = { IndicatorId::EMA, 10 };
     static IndicatorKey rsi14 = { IndicatorId::RSI, 14 };
+    static IndicatorKey volat10 = { IndicatorId::Volatility, 10 };
     static IndicatorKey volat14 = { IndicatorId::Volatility, 14 };
     static IndicatorKey volat20 = { IndicatorId::Volatility, 20 };
+    static IndicatorKey volat30 = { IndicatorId::Volatility, 30 };
+    static IndicatorKey volat60 = { IndicatorId::Volatility, 60 };
+    static IndicatorKey volatPercentile50_50 = { IndicatorId::VolatilityPercentile, 20, 0.3 };
+    static IndicatorKey atr14 = { IndicatorId::ATR, 14 };
+    static IndicatorKey atr20 = { IndicatorId::ATR, 20 };
+    static IndicatorKey atrPercentile14_40 = { IndicatorId::ATRPercentile, 14, 0.4 };
 }
 
 class IndicatorSet {
 public:
+	using Values = std::unordered_map<IndicatorKey, double, IndicatorKeyHash>;
     bool has(const IndicatorKey& key) const {
         return values_.contains(key);
     }
@@ -49,6 +61,10 @@ public:
         values_[key] = value;
     }
 
+    const Values & values() const {
+        return values_;
+	}
+
 private:
-    std::unordered_map<IndicatorKey, double, IndicatorKeyHash> values_;
+    Values values_;
 };

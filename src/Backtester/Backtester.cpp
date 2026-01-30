@@ -2,6 +2,21 @@
 #include "backtester/FixedFractionalAllocator.hpp"
 #include "indicators/BasicIndicatorEngine.hpp"
 
+double getVolatility(const IndicatorSet& indicatorSet)
+{
+	double result = 0.0;
+	const auto& values = indicatorSet.values();
+    for(auto& i : indicatorSet.values())
+    {
+        if(i.first.id == IndicatorId::Volatility)
+        {
+			result = i.second;
+        }
+    }
+
+    return result;
+}
+
 void Backtester::run(
     const std::string& symbol,
     const MarketData& marketData,
@@ -27,7 +42,7 @@ void Backtester::run(
             IndicatorSet indicators = indicatorEngine_.compute(series, i, required);
             StrategyContext ctx{
                 series.bars[i].close,
-                indicators.get({ IndicatorId::Volatility, static_cast<int>(endIndex - startIndex) }),
+				getVolatility(indicators),
                 i,
 				portfolio_.positionQuantity(symbol) > 0.0
 		    };
@@ -41,21 +56,20 @@ void Backtester::run(
             
             decision.quantity = allocator.allocate(allocCtx);
             
-            if(decision.quantity <= 0.0)
+            if(decision.quantity > 0.0)
             {
-                continue;
+		        portfolio_.apply(symbol, decision, ctx.closePrice);
+
+                OutputEventContext outputCtx {
+                    symbol,
+                    series.bars[i].ts,
+                    ctx,
+                    decision,
+                    portfolio_
+		        };
+
+                output_.onBar(outputCtx, priceSnapshot);
             }
-
-		    portfolio_.apply(symbol, decision, ctx.closePrice);
-
-            OutputEventContext outputCtx {
-                series.bars[i].ts,
-                ctx,
-                decision,
-                portfolio_
-		    };
-
-            output_.onBar(outputCtx, priceSnapshot);
         }
     }
   

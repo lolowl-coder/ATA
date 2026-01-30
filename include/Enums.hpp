@@ -37,7 +37,10 @@ static const char* strategyActionToString(StrategyAction value)
 	X(SMA) \
 	X(EMA) \
 	X(RSI) \
-	X(Volatility)
+	X(Volatility) \
+	X(VolatilityPercentile) \
+	X(ATR) \
+	X(ATRPercentile)
 
 enum class IndicatorId {
 	#define X(value) value,

@@ -61,5 +61,6 @@ std::string AlphaVantageDownloader::buildUrl(
         "&symbol=" + symbol +
         "&interval=" + intervalString(timeframe) +
         "&apikey=" + mApiKey +
-        "&outputsize=compact";
+        "&outputsize=compact" +
+        "&adjusted=true";
 }

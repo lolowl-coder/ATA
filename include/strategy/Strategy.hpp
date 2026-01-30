@@ -18,4 +18,13 @@ public:
         const StrategyContext& ctx,
         const IndicatorSet& indicators
     ) const = 0;
+    size_t getMaxPeriod() const {
+        size_t maxLookback = 0;
+        for (const auto& key : requiredIndicators()) {
+            if (static_cast<size_t>(key.period) > maxLookback) {
+                maxLookback = static_cast<size_t>(key.period);
+            }
+        }
+        return maxLookback;
+	}
 };

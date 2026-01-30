@@ -1,4 +1,5 @@
 #include "indicators/Indicators.hpp"
+#include "core/Math.hpp"
 
 #include <cmath>
 #include <numeric>
@@ -87,6 +88,36 @@ double rsi(const std::vector<double>& values, size_t window)
 
     const double rs = gain / loss;
     return 100.0 - (100.0 / (1.0 + rs));
+}
+
+double volatilityPercentile(const std::vector<double>& values, size_t window, const double P)
+{
+	return percentile(values, window, P);
+}
+
+double ATR(const std::vector<Bar>& bars, const size_t window)
+{
+    double atr = 0.0;
+    for(size_t i = bars.size() - window; i < bars.size(); ++i)
+    {
+        const double high = bars[i].high;
+        const double low = bars[i].low;
+        const double prevClose = bars[i - 1].close;
+        const double tr = std::max({
+            high - low,
+            std::abs(high - prevClose),
+            std::abs(low - prevClose)
+        });
+        atr += tr;
+    }
+    atr /= static_cast<double>(window);
+
+	return atr;
+}
+
+double ATRPercentile(const std::vector<double>& atrHistory, const size_t window, const double P)
+{
+	return percentile(atrHistory, window, P);
 }
 
 } // namespace Indicators

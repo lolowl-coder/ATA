@@ -8,7 +8,7 @@
 TEST_CASE("MA strategy emits Buy when price above MA")
 {
     IndicatorSet indicators;
-    indicators.set(indicators::smaFast5, 100.0);
+    indicators.set(indicators::sma5, 100.0);
 
     StrategyContext ctx;
     ctx.closePrice = 105.0;
@@ -23,7 +23,7 @@ TEST_CASE("MA strategy emits Buy when price above MA")
 TEST_CASE("MA strategy emits Sell when price below MA")
 {
     IndicatorSet indicators;
-    indicators.set(indicators::smaFast5, 100.0);
+    indicators.set(indicators::sma5, 100.0);
 
     StrategyContext ctx;
     ctx.closePrice = 95.0;

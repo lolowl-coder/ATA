@@ -8,9 +8,15 @@ void ConsoleOutput::onBar(const OutputEventContext& ctx, const PriceSnapshot& pr
     // Minimal heartbeat (can be disabled later)
     std::cout
         << "[BAR] "
-        << ctx.ts
-        << " Close=" << ctx.strategyCtx.closePrice
-        << " Equity=" << ctx.portfolio.equity(priceSnapshot)
+        << " Symbol " << ctx.symbol
+        << " Time " << ctx.ts
+        << " Close " << ctx.strategyCtx.closePrice
+        << " Volatility " << ctx.strategyCtx.volatility
+        << " Decision " << strategyActionToString(ctx.decision.action)
+        << " Confidence " << ctx.decision.confidence
+        << " Quantity " << ctx.decision.quantity
+        << " Equity " << ctx.portfolio.equity(priceSnapshot)
+        << " Cash " << ctx.portfolio.cash()
         << "\n";
 }
 
@@ -23,10 +29,10 @@ void ConsoleOutput::onTrade(const OutputEventContext& ctx, const PriceSnapshot& 
         << ctx.ts
         << " "
         << strategyActionToString(d.action)
-        << " Qty=" << d.quantity
-        << " Price=" << ctx.strategyCtx.closePrice
-        << " Confidence=" << std::fixed << std::setprecision(2) << d.confidence
-        << " Equity=" << ctx.portfolio.equity(priceSnapshot)
+        << " Qty " << d.quantity
+        << " Price " << ctx.strategyCtx.closePrice
+        << " Confidence " << std::fixed << std::setprecision(2) << d.confidence
+        << " Equity " << ctx.portfolio.equity(priceSnapshot)
         << "\n";
 }
 
